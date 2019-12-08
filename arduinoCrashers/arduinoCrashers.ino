@@ -1,40 +1,39 @@
-struct ServoValues {
-  int minValue;
-  int maxValue;
-  int channel;
-  String servoName;
-  bool mirror;
-  int lastPosition = 512;
-  int counterShutDown;
-  bool stopAndGo;
-  int shutDownWhen;
-};
-
 #include "Adafruit_Thermal.h"
 #include "SoftwareSerial.h"
+#include <Servo.h>
 #define TX_PIN 6 // Arduino transmit  YELLOW WIRE  labeled RX on printer
 #define RX_PIN 5 // Arduino receive   GREEN WIRE   labeled TX on printer
 SoftwareSerial mySerial(RX_PIN, TX_PIN); // Declare SoftwareSerial obj first
 Adafruit_Thermal printer(&mySerial);     // Pass addr to printer constructor
 
+Servo myservo;
 
-ServoValues heroServo;
-ServoValues enemyServo;
-ServoValues princessServo;
+Servo heroServo;
+Servo enemyServo;
+Servo princessServo;
+
+int heroPin = 8;
+int enemyPin = 9;
+int princessPin = 10;
 
 int yesButtonPin = 3;
 int noButtonPin = 4;
 
-#include <Servo.h>
+int heroLife[3] = {11,12,13};
+
+enum  story {
+  INIT, SETTIME, INFUNZIONE, YOUDIE
+};
+story chapter = INIT;
 
 
 void setup() {
   Serial.begin(9600);
 
   // This line is for compatibility with the Adafruit IotP project pack,
-  // which uses pin 7 as a spare grounding point.  You only need this if
-  // wired up the same way (w/3-pin header into pins 5/6/7):
-  pinMode(7, OUTPUT); digitalWrite(7, LOW);
+  // which uses pin 2 as a spare grounding point.  You only need this if
+  // wired up the same way (w/3-pin header into pins 5/6/2):
+  pinMode(2, OUTPUT); digitalWrite(2, LOW);
 
   // NOTE: SOME PRINTERS NEED 9600 BAUD instead of 19200, check test page.
   mySerial.begin(19200);  // Initialize SoftwareSerial
@@ -43,9 +42,32 @@ void setup() {
   pinMode(yesButtonPin, INPUT);
   pinMode(noButtonPin, INPUT);
 
+  pinMode(heroLife[0], OUTPUT);
+  pinMode(heroLife[1], OUTPUT);
+  pinMode(heroLife[2], OUTPUT);
+
+  digitalWrite(heroLife[0], HIGH);
+  digitalWrite(heroLife[1], HIGH);
+  digitalWrite(heroLife[2], HIGH);
+
+  heroServo.attach(8);
+  enemyServo.attach(9);
+  princessServo.attach(10);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  switch (chapter)
+  {
+    case INIT:
+      {
+        break;
+      }
+    default:
+      {
+        break;
+      }
 
+  }
+
+  delay(50);
 }
