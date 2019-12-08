@@ -27,7 +27,7 @@ const int attackPosition = 270;
 int heroLife[3] = {11, 12, 13};
 int enemyLife[3] = {14, 15, 16};
 enum  story {
-  INIT, SETTIME, INFUNZIONE, YOUDIE
+  INIT, GOINGTOSAVEPRINCESS, GOINGEQUALLY, HEROICENTRY, STEALTHENTRY, ENEMYDEFENSE, ENEMYSURPISED, ENEMYATTACHED, YOUDIE, YOUWIN
 };
 story chapter = INIT;
 
@@ -76,7 +76,46 @@ void loop() {
         break;
       }
 
-     
+    case GOINGTOSAVEPRINCESS:
+      {
+        break;
+      }
+
+    case GOINGEQUALLY:
+      {
+        break;
+      }
+
+    case HEROICENTRY:
+      {
+        break;
+      }
+
+    case STEALTHENTRY:
+      {
+        break;
+      }
+
+    case ENEMYSURPISED:
+      {
+        break;
+      }
+
+    case ENEMYDEFENSE:
+      {
+        break;
+      }
+
+    case YOUDIE:
+      {
+        break;
+      }
+
+    case YOUWIN:
+      {
+        break;
+      }
+
     default:
       {
         break;
@@ -85,4 +124,12 @@ void loop() {
   }
 
   delay(50);
+}
+
+
+
+void changeChapter(int hero,int enemy,int princess,story newChapter)
+{
+
+  return;
 }
