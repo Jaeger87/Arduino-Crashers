@@ -32,10 +32,9 @@ int enemyLife = 3;
 bool shieldHealthy = true;
 
 enum  story {
-  SETUP, INIT, GOINGTOSAVEPRINCESS, GOINGEQUALLY, HEROICENTRY, STEALTHENTRY, ENEMYDEFENSE, ENEMYSURPISED, ENEMYATTACHED, YOUDIE, YOUWIN
+  SETUP, INIT, GOINGTOSAVEPRINCESS, GOINGEQUALLY, ENEMYCAMP, HEROICENTRY, STEALTHENTRY, ENEMYDEFENSE, ENEMYSURPISED, ENEMYATTACHED, YOUDIE, YOUWIN
 };
 story chapter = INIT;
-bool havetoPrint = true;
 
 void setup() {
   Serial.begin(9600);
@@ -72,6 +71,10 @@ void setup() {
   enemyServo.attach(9);
   princessServo.attach(10);
 
+  heroLife = 3;
+  enemyLife = 3;
+  shieldHealthy = true;
+
 
 
   changeChapter(walkPosition, basePosition, basePosition, INIT);
@@ -84,7 +87,6 @@ void loop() {
   {
     case INIT:
       {
-        havetoPrint = false;
         printer.println(F("Oh noo!\n The princess was kidnapped by the barbarian's boss  URZUNTUM!\n What you wanna do?"));
         printer.println(F("Press Green to accept the quest\nPress Red to stay at home and play castle crushers."));
         delay(200);
@@ -98,16 +100,46 @@ void loop() {
 
     case GOINGTOSAVEPRINCESS:
       {
+        printer.println(F("Fuck yeah! let'go to kick some barbarians ass and save the princess!"));
+        delay(2500);
+        changeChapter(walkPosition, basePosition, walkPosition, ENEMYCAMP);
         break;
       }
 
     case GOINGEQUALLY:
       {
+        printer.println(F("Are you serious?\nHow i suppose to continue the story if you choose to stay at Home?\nTake your sword and shield and go to save the princess, idiot."));
+        delay(2500);
+        changeChapter(walkPosition, basePosition, walkPosition, ENEMYCAMP);
         break;
       }
 
+    case ENEMYCAMP:
+      {
+        printer.println(F("You are in front the enemy camp\nFrom your position ypu can see the princess, they bound her on a pale\nWho knows what will be her end if you don't save her!\n"
+                          "Now, you have to take a decision.\nYou can break through the enemy gates and go forward with your strenght\n Or use your stealth skill and try to enter without the guards noticing.\n"
+                          "Press green if you are brave, Press Red if you believe to be sly."));
+        delay(800);
+        if (waitButtonAndReturnYesButton())
+          changeChapter(walkPosition, defensePosition, walkPosition, HEROICENTRY);
+        else
+          changeChapter(walkPosition, walkPosition, walkPosition, STEALTHENTRY);
+        break;
+      }
     case HEROICENTRY:
       {
+        printer.println(F("Once you enter in the camp you kill quickly two guards and the others soldiers run away from fear,\n"
+                          "when you reach the princess URZUNTUM appears in his defence position. What you gonna do?\n"
+                          "Press Green to attack, Press Red to try to go round URZUNTUM and place at his shoulders."));
+        delay(800);
+        if (waitButtonAndReturnYesButton())
+        {
+          
+        }
+        else
+        {
+          
+        }
         break;
       }
 
@@ -128,11 +160,13 @@ void loop() {
 
     case YOUDIE:
       {
+
         break;
       }
 
     case YOUWIN:
       {
+
         break;
       }
 
@@ -153,7 +187,7 @@ void loop() {
 }
 
 
-void waitButtonAndReturnYesButton()
+bool waitButtonAndReturnYesButton()
 {
   bool waitingForChoices = true;
   bool oldyesButtonState = false;
@@ -178,7 +212,7 @@ void waitButtonAndReturnYesButton()
     }
     oldYesButtonState = yesButtonState;
     oldNoButtonState = noButtonState;
-    delay(50);
+    delay(60);
   }
 
 
