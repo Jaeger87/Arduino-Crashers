@@ -29,12 +29,13 @@ int enemyLifeLedPin[3] = {14, 15, 16};
 
 int heroLife = 3;
 int enemyLife = 3;
+bool shieldHealthy = true;
 
 enum  story {
   SETUP, INIT, GOINGTOSAVEPRINCESS, GOINGEQUALLY, HEROICENTRY, STEALTHENTRY, ENEMYDEFENSE, ENEMYSURPISED, ENEMYATTACHED, YOUDIE, YOUWIN
 };
 story chapter = INIT;
-
+bool havetoPrint = true;
 
 void setup() {
   Serial.begin(9600);
@@ -70,6 +71,12 @@ void setup() {
   heroServo.attach(8);
   enemyServo.attach(9);
   princessServo.attach(10);
+
+
+
+  changeChapter(walkPosition, basePosition, basePosition, INIT);
+
+
 }
 
 void loop() {
@@ -77,6 +84,15 @@ void loop() {
   {
     case INIT:
       {
+        havetoPrint = false;
+        printer.println(F("Oh noo!\n The princess was kidnapped by the barbarian's boss  URZUNTUM!\n What you wanna do?"));
+        printer.println(F("Press Green to accept the quest\nPress Red to stay at home and play castle crushers."));
+        delay(200);
+        bool acceptQuest = waitButtonAndReturnYesButton();
+        if (acceptQuest)
+          changeChapter(walkPosition, basePosition, basePosition, GOINGTOSAVEPRINCESS);
+        else
+          changeChapter(walkPosition, basePosition, basePosition, GOINGEQUALLY);
         break;
       }
 
@@ -137,6 +153,36 @@ void loop() {
 }
 
 
+void waitButtonAndReturnYesButton()
+{
+  bool waitingForChoices = true;
+  bool oldyesButtonState = false;
+  int yesButtonState = 0;
+  int noButtonState = 0;
+  int oldYesButtonState = 0;
+  int oldNoButtonState = 0;
+  while (waitingForChoices)
+  {
+    yesButtonState = digitalRead(yesButtonPin);
+    noButtonState = digitalRead(noButtonPin);
+
+    if (yesButtonState != oldYesButtonState)
+    {
+      if (yesButtonState == HIGH)
+        return true;
+    }
+    if (noButtonState != oldNoButtonState)
+    {
+      if (noButtonState == HIGH)
+        return false;
+    }
+    oldYesButtonState = yesButtonState;
+    oldNoButtonState = noButtonState;
+    delay(50);
+  }
+
+
+}
 
 void changeChapter(int hero, int enemy, int princess, story newChapter)
 {
