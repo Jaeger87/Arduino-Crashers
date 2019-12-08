@@ -12,15 +12,20 @@ Servo heroServo;
 Servo enemyServo;
 Servo princessServo;
 
-int heroPin = 8;
-int enemyPin = 9;
-int princessPin = 10;
+const int heroPin = 8;
+const int enemyPin = 9;
+const int princessPin = 10;
 
-int yesButtonPin = 3;
-int noButtonPin = 4;
+const int yesButtonPin = 3;
+const int noButtonPin = 4;
 
-int heroLife[3] = {11,12,13};
+const int basePosition = 0;
+const int walkPosition = 90;
+const int defensePosition = 180;
+const int attackPosition = 270;
 
+int heroLife[3] = {11, 12, 13};
+int enemyLife[3] = {14, 15, 16};
 enum  story {
   INIT, SETTIME, INFUNZIONE, YOUDIE
 };
@@ -50,6 +55,14 @@ void setup() {
   digitalWrite(heroLife[1], HIGH);
   digitalWrite(heroLife[2], HIGH);
 
+  pinMode(enemyLife[0], OUTPUT);
+  pinMode(enemyLife[1], OUTPUT);
+  pinMode(enemyLife[2], OUTPUT);
+
+  digitalWrite(enemyLife[0], HIGH);
+  digitalWrite(enemyLife[1], HIGH);
+  digitalWrite(enemyLife[2], HIGH);
+
   heroServo.attach(8);
   enemyServo.attach(9);
   princessServo.attach(10);
@@ -62,6 +75,8 @@ void loop() {
       {
         break;
       }
+
+     
     default:
       {
         break;
