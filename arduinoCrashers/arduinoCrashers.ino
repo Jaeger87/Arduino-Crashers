@@ -138,9 +138,14 @@ void loop() {
         delay(800);
         if (waitButtonAndReturnYesButton())
         {
-          if (hitEnemyShield())
+          if(hitEnemyShield())
           {
-            printer.println(F("You hit and damage the shield\nUnfortunatly a piece of the shield\nfall down and hit your head wounding you."));
+            changeChapter(basePosition, basePosition, attackPosition, YOUWIN);
+          }
+          else 
+          if(enemyShieldHurtYou())
+          {
+            changeChapter(basePosition, walkPosition, walkPosition, YOUDIE);
           }
         }
         else
@@ -257,22 +262,29 @@ bool enemyLoseLife()
 const int riskPoint = 8;
 const int successPointHitShield = 12;
 
-bool hitEnemyShield()//return true if the hero lose a life
+bool hitEnemyShield()//return true if you kill the enemy
 {
   long randNumber = random(100);
   if (randNumber < (maxEnemyShield - enemyShield) * (successPointHitShield - (maxEnemyShield - enemyShield)))
   {
-    enemyLoseLife();
+    printer.println(F("Your hit is such power that not only\ndamage URZUNTUM's shield\nbut even hits him."));
+    delay(700);
+    return enemyLoseLife();
   }
+  printer.println(F("Your hit lashes out URZUNTUM's shield\n you don't hit your enemy but at least you have damaged\nhis shield."));
+  return false;
+}
 
 
+bool enemyShieldHurtYou()//return true if the hero lose a life
+{
   if (enemyShield > 0)
     enemyShield--;
-  randNumber = random(100);
+  long randNumber = random(100);
 
   if (randNumber < (maxEnemyShield - enemyShield) * riskPoint)
   {
-    printer.println(F("nUnfortunatly a piece of the shield\nfall down and hit your head wounding you."));
+    printer.println(F("Unfortunatly a piece of the shield\nfall down and hit your head wounding you."));
     delay(700);
     heroLoseLife();
     return true;
