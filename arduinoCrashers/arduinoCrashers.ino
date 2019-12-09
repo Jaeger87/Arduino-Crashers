@@ -29,7 +29,10 @@ int enemyLifeLedPin[3] = {14, 15, 16};
 
 int heroLife = 3;
 int enemyLife = 3;
-bool shieldHealthy = true;
+
+const int maxEnemyShield = 7;
+int heroShield = 3;
+int enemyShield = maxEnemyShield;
 
 enum  story {
   SETUP, INIT, GOINGTOSAVEPRINCESS, GOINGEQUALLY, ENEMYCAMP, HEROICENTRY, STEALTHENTRY, ENEMYDEFENSE, ENEMYSURPISED, ENEMYATTACHED, YOUDIE, YOUWIN
@@ -73,7 +76,8 @@ void setup() {
 
   heroLife = 3;
   enemyLife = 3;
-  shieldHealthy = true;
+  heroShield = 3;
+  enemyShield = maxEnemyShield;
 
 
 
@@ -134,11 +138,14 @@ void loop() {
         delay(800);
         if (waitButtonAndReturnYesButton())
         {
-          
+          if (hitEnemyShield())
+          {
+            printer.println(F("You hit and damage the shield\nUnfortunatly a piece of the shield\nfall down and hit your head wounding you."));
+          }
         }
         else
         {
-          
+
         }
         break;
       }
@@ -244,5 +251,31 @@ bool enemyLoseLife()
   if (enemyLoseLife == 0)
     return true;
 
+  return false;
+}
+
+const int riskPoint = 8;
+const int successPointHitShield = 12;
+
+bool hitEnemyShield()//return true if the hero lose a life
+{
+  long randNumber = random(100);
+  if (randNumber < (maxEnemyShield - enemyShield) * (successPointHitShield - (maxEnemyShield - enemyShield)))
+  {
+    enemyLoseLife();
+  }
+
+
+  if (enemyShield > 0)
+    enemyShield--;
+  randNumber = random(100);
+
+  if (randNumber < (maxEnemyShield - enemyShield) * riskPoint)
+  {
+    printer.println(F("nUnfortunatly a piece of the shield\nfall down and hit your head wounding you."));
+    delay(700);
+    heroLoseLife();
+    return true;
+  }
   return false;
 }
