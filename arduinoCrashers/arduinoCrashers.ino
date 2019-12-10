@@ -30,14 +30,20 @@ int enemyLifeLedPin[3] = {14, 15, 16};
 int heroLife = 3;
 int enemyLife = 3;
 
+bool enemyAdvantageP = false;
+bool playerAdvantageP = false;
 const int maxEnemyShield = 7;
 int heroShield = 3;
 int enemyShield = maxEnemyShield;
 
 enum  story {
-  SETUP, INIT, GOINGTOSAVEPRINCESS, GOINGEQUALLY, ENEMYCAMP, HEROICENTRY, STEALTHENTRY, ENEMYDEFENSE, ENEMYSURPISED, ENEMYATTACHED, YOUDIE, YOUWIN
+  SETUP, INIT, GOINGTOSAVEPRINCESS, GOINGEQUALLY, ENEMYCAMP, HEROICENTRY, STEALTHENTRY, ADVANTAGEPOSITION, ENEMYDEFENSE, ENEMYSURPISED, ENEMYPREPARETOATTACK, ENEMYMOVE,
+  ENEMYATTACK, YOUDIE, YOUWIN
 };
 story chapter = INIT;
+
+
+const int pointsEnemyMove = 28;
 
 void setup() {
   Serial.begin(9600);
@@ -74,16 +80,15 @@ void setup() {
   enemyServo.attach(9);
   princessServo.attach(10);
 
+  enemyAdvantageP = false;
+  playerAdvantageP = false;
   heroLife = 3;
   enemyLife = 3;
   heroShield = 3;
   enemyShield = maxEnemyShield;
 
 
-
   changeChapter(walkPosition, basePosition, basePosition, INIT);
-
-
 }
 
 void loop() {
@@ -138,18 +143,16 @@ void loop() {
         delay(800);
         if (waitButtonAndReturnYesButton())
         {
-          if(hitEnemyShield())
-          {
-            changeChapter(basePosition, basePosition, attackPosition, YOUWIN);
-          }
-          else 
-          if(enemyShieldHurtYou())
-          {
-            changeChapter(basePosition, walkPosition, walkPosition, YOUDIE);
-          }
+          procedureAttackEnemyShield();
         }
         else
         {
+          heroServo.write(walkPosition);
+
+          if (smartWalk())
+            changeChapter(walkPosition, defensePosition, walkPosition, ADVANTAGEPOSITION);
+          else
+            changeChapter(walkPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
 
         }
         break;
@@ -160,6 +163,22 @@ void loop() {
         break;
       }
 
+    case ADVANTAGEPOSITION:
+      {
+        playerAdvantageP = false;
+        printer.println(F("It's the best chance to attack!\nPress green to direct attack URZUNTUM body\nPress Red to attack URUZUNTUM on his shield"));
+        if (waitButtonAndReturnYesButton())
+        {
+          heroServo.write(attackPosition);
+          delay(1500);
+
+        }
+        else
+        {
+          procedureAttackEnemyShield();
+        }
+        break;
+      }
     case ENEMYSURPISED:
       {
         break;
@@ -169,16 +188,22 @@ void loop() {
       {
         break;
       }
+    case ENEMYMOVE:
+      {
+        break;
+      }
+    case ENEMYATTACK:
+      {
+        break;
+      }
 
     case YOUDIE:
       {
-
         break;
       }
 
     case YOUWIN:
       {
-
         break;
       }
 
@@ -192,7 +217,6 @@ void loop() {
       {
         break;
       }
-
   }
 
   delay(50);
@@ -275,6 +299,22 @@ bool hitEnemyShield()//return true if you kill the enemy
   return false;
 }
 
+const int heroLifePointHit = 24;
+const int enemyLifePointHit = 7;
+bool hitEnemy()//return true if you kill the enemy
+{
+  long randNumber = random(100);
+  if (randNumber < (heroLife * heroLifePointHit) - (enemyLife * enemyLifePointHit))
+  {
+    printer.println(F("Yes, you hit URZUNTUM."));
+    delay(700);
+    return enemyLoseLife();
+  }
+  printer.println(F("OH NOO\n You miss URZUNTUM and now the barbarian boss\nis ready to attack when you are unbalanced."));
+  delay(1150);
+  enemyAdvantageP = true;
+  return false;
+}
 
 bool enemyShieldHurtYou()//return true if the hero lose a life
 {
@@ -290,4 +330,43 @@ bool enemyShieldHurtYou()//return true if the hero lose a life
     return true;
   }
   return false;
+}
+
+const int walkLifePoints = 16;
+const int walhShieldPoint = 4;
+bool smartWalk()
+{
+  long randNumber = random(100);
+  if (randNumber < (walkLifePoints * heroLife) - (walhShieldPoint * heroShield))
+  {
+    playerAdvantageP = true;
+    printer.println(F("You move very fast and\nURZUNTUM stays in defense position."));
+    delay(1200);
+    return true;
+  }
+  printer.println(F("You are not so fast\n URZUNTUM understand your move and walks to\ncancel your advantage."));
+  return false;
+}
+
+
+void procedureAttackEnemyShield()
+{
+  heroServo.write(attackPosition);
+  delay(1500);
+  if (hitEnemyShield())
+  {
+    changeChapter(basePosition, basePosition, attackPosition, YOUWIN);
+  }
+  else if (enemyShieldHurtYou())
+  {
+    changeChapter(basePosition, walkPosition, walkPosition, YOUDIE);
+  }
+
+  delay(2000);
+
+  long randNumber = random(100);
+  if (randNumber < enemyLife * pointsEnemyMove)
+    changeChapter(attackPosition, walkPosition, walkPosition, ENEMYMOVE);
+  else
+    changeChapter(attackPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
 }
