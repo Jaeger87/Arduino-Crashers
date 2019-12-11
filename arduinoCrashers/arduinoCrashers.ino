@@ -39,7 +39,7 @@ int heroShield = 3;
 int enemyShield = maxEnemyShield;
 
 enum  story {
-  SETUP, INIT, GOINGTOSAVEPRINCESS, GOINGEQUALLY, ENEMYCAMP, HEROICENTRY, STEALTHENTRY, ADVANTAGEPOSITION, ENEMYDEFENSE, ENEMYSURPISED, ENEMYPREPARETOATTACK, ENEMYMOVE,
+  SETUP, INIT, GOINGTOSAVEPRINCESS, GOINGEQUALLY, ENEMYCAMP, HEROICENTRY, STEALTHENTRY, ADVANTAGEPOSITION, ENEMYDEFENSE, ENEMYPREPARETOATTACK, ENEMYMOVE,
   ENEMYATTACK, YOUDIE, YOUWIN
 };
 story chapter = INIT;
@@ -82,6 +82,11 @@ void setup() {
   enemyServo.attach(9);
   princessServo.attach(10);
 
+
+  heroServo.write(basePosition);
+  enemyServo.write(basePosition);
+  princessServo.write(basePosition);
+
   enemyAdvantageP = false;
   playerAdvantageP = false;
   heroLife = 3;
@@ -90,6 +95,7 @@ void setup() {
   enemyShield = maxEnemyShield;
 
 
+  delay(4000);
   changeChapter(walkPosition, basePosition, basePosition, INIT);
 }
 
@@ -156,13 +162,11 @@ void loop() {
 
     case STEALTHENTRY:
       {
-        break;
-      }
+        printer.println(F("Like a shadow in the night you enter in the enemy camp and nobody noticed\nsilently ypou kill all the guards\n"
+                          "and enter where they keep the princess, when you enter the room\nyou see the princess but is not alone\nURZUNTUM is with she.\n"
+                          "You come closer and place\non URZUNTUM shoulders, where you want to attack?"
+                          "Press green to direct attack URZUNTUM body\nPress Red to attack URUZUNTUM on his shield"));
 
-    case ADVANTAGEPOSITION:
-      {
-        playerAdvantageP = false;
-        printer.println(F("It's the best chance to attack!\nPress green to direct attack URZUNTUM body\nPress Red to attack URUZUNTUM on his shield"));
         if (waitButtonAndReturnYesButton())
         {
           heroServo.write(attackPosition);
@@ -180,13 +184,11 @@ void loop() {
         }
         break;
       }
-    case ENEMYSURPISED:
-      {
-        printer.println(F("Like a shadow in the night you enter in the enemy camp and nobody noticed\nsilently ypou kill all the guards\n"
-                          "and enter where they keep the princess, when you enter the room\nyou see the princess but is not alone\nURZUNTUM is with she.\n"
-                          "You come closer and place\non URZUNTUM shoulders, where you want to attack?"
-                          "Press green to direct attack URZUNTUM body\nPress Red to attack URUZUNTUM on his shield"));
 
+    case ADVANTAGEPOSITION:
+      {
+        playerAdvantageP = false;
+        printer.println(F("It's the best chance to attack!\nPress green to direct attack URZUNTUM body\nPress Red to attack URUZUNTUM on his shield"));
         if (waitButtonAndReturnYesButton())
         {
           heroServo.write(attackPosition);
@@ -221,6 +223,21 @@ void loop() {
       }
     case ENEMYMOVE:
       {
+        printer.println(F("URZUNTUM starts to move\nhe want for sure to take a good position\nfor his attack.\n"
+                          "Press Green to move and cancel his advantage\nPress red to do a really quick attack."));
+        delay(longDelayPrinter);
+        if (waitButtonAndReturnYesButton())
+        {
+          changeChapter(walkPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
+        }
+        else
+        {
+          procedureQuickAttack();
+        }
+        break;
+      }
+    case ENEMYPREPARETOATTACK:
+      {
         break;
       }
     case ENEMYATTACK:
@@ -230,17 +247,26 @@ void loop() {
 
     case YOUDIE:
       {
+        printer.println(F("So, you die!\nI suppose that is a thing that could\nhappen but honestly i programmed this game\nin a way"
+                          "to avoid this, so\ncongratulations|\n\n\nI almost forgot to tell you that right now URZUNTUM is playing with you dead body\n it is so cute)\n."
+                          "Your adventure is over, now is the time to cut\nyour paper and find a good place to conserve it\n Press any button to restart the Adventure."));
+        delay(3000);
+        waitButtonAndReturnYesButton();
+        changeChapter(basePosition, basePosition, basePosition, SETUP);
         break;
       }
 
     case YOUWIN:
       {
+        waitButtonAndReturnYesButton();
+        changeChapter(basePosition, basePosition, basePosition, SETUP);
         break;
       }
 
     case SETUP:
       {
         setup();
+        delay(6000);
         break;
       }
 
@@ -364,11 +390,11 @@ bool enemyShieldHurtYou()//return true if the hero lose a life
 }
 
 const int walkLifePoints = 16;
-const int walhShieldPoint = 4;
+const int walkShieldPoint = 4;
 bool smartWalk()
 {
   long randNumber = random(100);
-  if (randNumber < (walkLifePoints * heroLife) - (walhShieldPoint * heroShield))
+  if (randNumber < (walkLifePoints * heroLife) - (walkShieldPoint * heroShield))
   {
     playerAdvantageP = true;
     printer.println(F("You move very fast and\nURZUNTUM stays in defense position."));
@@ -404,9 +430,34 @@ void procedureAttackEnemyShield()
 void procedureSmartWalk()
 {
   heroServo.write(walkPosition);
-
+  delay(100);
   if (smartWalk())
     changeChapter(walkPosition, defensePosition, walkPosition, ADVANTAGEPOSITION);
   else
     changeChapter(walkPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
+}
+
+const int quickLifePoints = 5;
+const int quickShieldPoint = 2;
+const int quickEnemyLifePoints = 1;
+const int quickEnemyShieldPoint = 5;
+void procedureQuickAttack()
+{
+  heroServo.write(attackPosition);
+  delay(100);
+  enemyAdvantageP = true;
+  long randNumber = random(100);
+  if (randNumber < (heroLife * quickLifePoints) - (enemyLife * quickEnemyLifePoints) - (heroShield * quickShieldPoint) + (enemyShield * quickEnemyShieldPoint))
+  {
+    printer.println(F("Oh WOW *_*\nYou really hit URZUNTUM\nYou are very speed but most of all lucky\n\n(believe me, i programmed this game)."));
+    delay(700);
+    if (enemyLoseLife())
+    {
+      changeChapter(basePosition, basePosition, attackPosition, YOUWIN);
+      return;
+    }
+  }
+  printer.println(F("As was to be expected you miss URZUNTUM\nand now is in a advantage position"));
+  delay(1150);
+  changeChapter(attackPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
 }
