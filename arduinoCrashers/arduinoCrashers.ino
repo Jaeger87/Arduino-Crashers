@@ -24,6 +24,8 @@ const int walkPosition = 90;
 const int defensePosition = 180;
 const int attackPosition = 270;
 
+const int longDelayPrinter = 3500;
+
 int heroLifeLedPin[3] = {11, 12, 13};
 int enemyLifeLedPin[3] = {14, 15, 16};
 
@@ -139,21 +141,15 @@ void loop() {
       {
         printer.println(F("Once you enter in the camp you kill quickly two guards and the others soldiers run away from fear,\n"
                           "when you reach the princess URZUNTUM appears in his defence position. What you gonna do?\n"
-                          "Press Green to attack, Press Red to try to go round URZUNTUM and place at his shoulders."));
-        delay(800);
+                          "Press Green to attack\nPress Red to try to go round URZUNTUM\nand place at his shoulders."));
+        delay(longDelayPrinter);
         if (waitButtonAndReturnYesButton())
         {
           procedureAttackEnemyShield();
         }
         else
         {
-          heroServo.write(walkPosition);
-
-          if (smartWalk())
-            changeChapter(walkPosition, defensePosition, walkPosition, ADVANTAGEPOSITION);
-          else
-            changeChapter(walkPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
-
+          procedureSmartWalk();
         }
         break;
       }
@@ -170,8 +166,13 @@ void loop() {
         if (waitButtonAndReturnYesButton())
         {
           heroServo.write(attackPosition);
-          delay(1500);
+          delay(longDelayPrinter);
+          if (hitEnemy())
+          {
+            changeChapter(basePosition, basePosition, attackPosition, YOUWIN);
+          }
 
+          changeChapter(attackPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
         }
         else
         {
@@ -181,11 +182,41 @@ void loop() {
       }
     case ENEMYSURPISED:
       {
+        printer.println(F("Like a shadow in the night you enter in the enemy camp and nobody noticed\nsilently ypou kill all the guards\n"
+                          "and enter where they keep the princess, when you enter the room\nyou see the princess but is not alone\nURZUNTUM is with she.\n"
+                          "You come closer and place\non URZUNTUM shoulders, where you want to attack?"
+                          "Press green to direct attack URZUNTUM body\nPress Red to attack URUZUNTUM on his shield"));
+
+        if (waitButtonAndReturnYesButton())
+        {
+          heroServo.write(attackPosition);
+          delay(longDelayPrinter);
+          if (hitEnemy())
+          {
+            changeChapter(basePosition, basePosition, attackPosition, YOUWIN);
+          }
+
+          changeChapter(attackPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
+        }
+        else
+        {
+          procedureAttackEnemyShield();
+        }
         break;
       }
 
     case ENEMYDEFENSE:
       {
+        printer.println(F("URZUNTUM raise his shield and\ngets defensive\nPress Green to attack\nPress Red to try to go round URZUNTUM\nand place at his shoulders."));
+        delay(longDelayPrinter);
+        if (waitButtonAndReturnYesButton())
+        {
+          procedureAttackEnemyShield();
+        }
+        else
+        {
+          procedureSmartWalk();
+        }
         break;
       }
     case ENEMYMOVE:
@@ -348,7 +379,6 @@ bool smartWalk()
   return false;
 }
 
-
 void procedureAttackEnemyShield()
 {
   heroServo.write(attackPosition);
@@ -369,4 +399,14 @@ void procedureAttackEnemyShield()
     changeChapter(attackPosition, walkPosition, walkPosition, ENEMYMOVE);
   else
     changeChapter(attackPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
+}
+
+void procedureSmartWalk()
+{
+  heroServo.write(walkPosition);
+
+  if (smartWalk())
+    changeChapter(walkPosition, defensePosition, walkPosition, ADVANTAGEPOSITION);
+  else
+    changeChapter(walkPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
 }
