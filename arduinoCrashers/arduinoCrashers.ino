@@ -238,10 +238,13 @@ void loop() {
       }
     case ENEMYPREPARETOATTACK:
       {
+                printer.println(F("URZUNTUM is ready to attack you at any moment.\nWhat you gonna do?"
+                "Press green to raise your shield\nPress red to try to dodge the hit"));
         break;
       }
     case ENEMYATTACK:
       {
+        enemyAdvantageP = false;
         break;
       }
 
