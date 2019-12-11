@@ -249,7 +249,7 @@ void loop() {
       {
         printer.println(F("So, you die!\nI suppose that is a thing that could\nhappen but honestly i programmed this game\nin a way"
                           "to avoid this, so\ncongratulations|\n\n\nI almost forgot to tell you that right now URZUNTUM is playing with you dead body\n it is so cute)\n."
-                          "Your adventure is over, now is the time to cut\nyour paper and find a good place to conserve it\n Press any button to restart the Adventure."));
+                          "Your adventure is over, now is the time to cut\nyour paper and find a good place to conserve it\n Press any button to restart the Adventure.\n\n\n\n\n\n---------\n\n"));
         delay(3000);
         waitButtonAndReturnYesButton();
         changeChapter(basePosition, basePosition, basePosition, SETUP);
@@ -258,6 +258,10 @@ void loop() {
 
     case YOUWIN:
       {
+        delay(5000);
+        printer.println(F("You made it!\n\nYou killed URZUNTUM and set free the princess\nShe is so happy that she kiss you\n(but you are not really smart\nand you kept your helmet on head)\n\n\n"
+                          "Your adventure is over, now is the time to cut\nyour paper and find a good place to conserve it\n Press any button to restart the Adventure.\n\n\n\n\n\n---------\n\n"));
+        
         waitButtonAndReturnYesButton();
         changeChapter(basePosition, basePosition, basePosition, SETUP);
         break;
