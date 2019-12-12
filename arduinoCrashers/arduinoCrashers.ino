@@ -25,7 +25,7 @@ const int defensePosition = 180;
 const int attackPosition = 270;
 
 const int longDelayPrinter = 3500;
-
+const int veryLongDelayPrinter = 7500;
 int heroLifeLedPin[3] = {11, 12, 13};
 int enemyLifeLedPin[3] = {14, 15, 16};
 
@@ -238,8 +238,20 @@ void loop() {
       }
     case ENEMYPREPARETOATTACK:
       {
-                printer.println(F("URZUNTUM is ready to attack you at any moment.\nWhat you gonna do?"
-                "Press green to raise your shield\nPress red to try to dodge the hit"));
+        printer.println(F("URZUNTUM is ready to attack you at any moment.\nWhat you gonna do?"
+                          "Press green to raise your shield\nPress red to try to dodge the hit"));
+        if (waitButtonAndReturnYesButton())
+        {
+          printer.println(F("You decided to parry the hit\nhope that the shield resist..."));
+          delay(veryLongDelayPrinter);
+          changeChapter(defensePosition, attackPosition, walkPosition, ENEMYATTACK);
+        }
+        else
+        {
+          printer.println(F("A brave decision\nlet's see if it was even quick..."));
+          delay(veryLongDelayPrinter);
+          changeChapter(walkPosition, attackPosition, walkPosition, ENEMYATTACK);
+        }
         break;
       }
     case ENEMYATTACK:
@@ -253,7 +265,7 @@ void loop() {
         printer.println(F("So, you die!\nI suppose that is a thing that could\nhappen but honestly i programmed this game\nin a way"
                           "to avoid this, so\ncongratulations|\n\n\nI almost forgot to tell you that right now URZUNTUM is playing with you dead body\n it is so cute)\n."
                           "Your adventure is over, now is the time to cut\nyour paper and find a good place to conserve it\n Press any button to restart the Adventure.\n\n\n\n\n\n---------\n\n"));
-        delay(3000);
+        delay(longDelayPrinter);
         waitButtonAndReturnYesButton();
         changeChapter(basePosition, basePosition, basePosition, SETUP);
         break;
@@ -264,7 +276,7 @@ void loop() {
         delay(5000);
         printer.println(F("You made it!\n\nYou killed URZUNTUM and set free the princess\nShe is so happy that she kiss you\n(but you are not really smart\nand you kept your helmet on head)\n\n\n"
                           "Your adventure is over, now is the time to cut\nyour paper and find a good place to conserve it\n Press any button to restart the Adventure.\n\n\n\n\n\n---------\n\n"));
-        
+
         waitButtonAndReturnYesButton();
         changeChapter(basePosition, basePosition, basePosition, SETUP);
         break;
@@ -273,7 +285,7 @@ void loop() {
     case SETUP:
       {
         setup();
-        delay(6000);
+        delay(veryLongDelayPrinter);
         break;
       }
 
