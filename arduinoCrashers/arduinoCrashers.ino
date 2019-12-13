@@ -24,13 +24,15 @@ const int walkPosition = 90;
 const int defensePosition = 180;
 const int attackPosition = 270;
 
+const int shortDelayPrinter = 1500;
 const int longDelayPrinter = 3500;
 const int veryLongDelayPrinter = 7500;
 int heroLifeLedPin[3] = {11, 12, 13};
 int enemyLifeLedPin[3] = {14, 15, 16};
 
 int heroLife = 3;
-int enemyLife = 3;
+const int maxEnemyLife = 3;
+int enemyLife = maxEnemyLife;
 
 bool enemyAdvantageP = false;
 bool playerAdvantageP = false;
@@ -91,7 +93,7 @@ void setup() {
   enemyAdvantageP = false;
   playerAdvantageP = false;
   heroLife = 3;
-  enemyLife = 3;
+  enemyLife = maxEnemyLife;
   heroShield = maxHeroShield;
   enemyShield = maxEnemyShield;
 
@@ -263,7 +265,7 @@ void loop() {
         delay(longDelayPrinter);
         if (defenseHero)
         {
-          if(procedureParring())
+          if (procedureParring())
           {
             changeChapter(basePosition, walkPosition, walkPosition, YOUDIE);
             return;
@@ -272,6 +274,7 @@ void loop() {
         }
         else
         {
+
 
         }
         enemyAdvantageP = false;
@@ -442,7 +445,7 @@ bool smartWalk()
 void procedureAttackEnemyShield()
 {
   heroServo.write(attackPosition);
-  delay(1500);
+  delay(shortDelayPrinter);
   if (hitEnemyShield())
   {
     changeChapter(basePosition, basePosition, attackPosition, YOUWIN);
@@ -452,7 +455,7 @@ void procedureAttackEnemyShield()
     changeChapter(basePosition, walkPosition, walkPosition, YOUDIE);
   }
 
-  delay(2000);
+  delay(shortDelayPrinter);
 
   long randNumber = random(100);
   if (randNumber < enemyLife * pointsEnemyMove)
@@ -461,10 +464,23 @@ void procedureAttackEnemyShield()
     changeChapter(attackPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
 }
 
+
+void procedureUrzuntumDecision(int heroPosition)
+{
+  printer.println(F("What will gonna do URZUNTUM...\n\n"));
+  delay(shortDelayPrinter);
+
+  long randNumber = random(100);
+  if (randNumber < enemyLife * pointsEnemyMove)
+    changeChapter(heroPosition, walkPosition, walkPosition, ENEMYMOVE);
+  else
+    changeChapter(heroPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
+}
+
 void procedureSmartWalk()
 {
   heroServo.write(walkPosition);
-  delay(200);
+  delay(shortDelayPrinter);
   if (smartWalk())
     changeChapter(walkPosition, defensePosition, walkPosition, ADVANTAGEPOSITION);
   else
@@ -478,7 +494,7 @@ const int quickEnemyShieldPoint = 5;
 void procedureQuickAttack()
 {
   heroServo.write(attackPosition);
-  delay(100);
+  delay(shortDelayPrinter);
   enemyAdvantageP = true;
   long randNumber = random(100);
   if (randNumber < (heroLife * quickLifePoints) - (enemyLife * quickEnemyLifePoints) - (heroShield * quickShieldPoint) + (enemyShield * quickEnemyShieldPoint))
@@ -504,13 +520,32 @@ bool procedureParring()
   if (heroShield > 0)
     heroShield--;
   long randNumber = random(100);
-
-  if (randNumber < (maxHeroShield - heroShield) * riskPoint)
+  int malusPosition = 0;
+  if (enemyAdvantageP)
+    malusPosition += 31;
+  if (randNumber < 6 + (heroShield * parringPoint) - malusPosition)
   {
-    printer.println(F("The URZUNTUM hit is such power\nthat your shield was not able to protect you\n"));
-    delay(700);
-    return heroLoseLife();
+    printer.println(F("The shield protected you.\nBut off course has suffered damages.\n"));
+    return false;
   }
-  printer.println(F("The shield protected you.\nBut off course has suffered damages.\n"));
-  return false;
+  printer.println(F("The URZUNTUM hit is such power\nthat your shield was not able to protect you\n"));
+  delay(shortDelayPrinter);
+  return heroLoseLife();
+}
+
+const int dodgeShieldPoint = 10;
+bool procedureDodge()
+{
+  long randNumber = random(100);
+  int malusPosition = 0;
+  if (enemyAdvantageP)
+    malusPosition += 31;
+  if (randNumber < (12 + (maxHeroShield - heroShield) * dodgeShieldPoint) - malusPosition + (maxEnemyLife - enemyLife) * 8)
+  {
+    printer.println(F("The shield protected you.\nBut off course has suffered damages.\n"));
+    return false;
+  }
+  printer.println(F("The URZUNTUM hit is such power\nthat your shield was not able to protect you\n"));
+  delay(shortDelayPrinter);
+  return heroLoseLife();
 }
