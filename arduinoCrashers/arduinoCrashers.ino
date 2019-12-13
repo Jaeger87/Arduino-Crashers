@@ -35,7 +35,8 @@ int enemyLife = 3;
 bool enemyAdvantageP = false;
 bool playerAdvantageP = false;
 const int maxEnemyShield = 7;
-int heroShield = 3;
+const int maxHeroShield = 3;
+int heroShield = maxHeroShield;
 int enemyShield = maxEnemyShield;
 
 enum  story {
@@ -91,7 +92,7 @@ void setup() {
   playerAdvantageP = false;
   heroLife = 3;
   enemyLife = 3;
-  heroShield = 3;
+  heroShield = maxHeroShield;
   enemyShield = maxEnemyShield;
 
 
@@ -99,6 +100,7 @@ void setup() {
   changeChapter(walkPosition, basePosition, basePosition, INIT);
 }
 
+bool defenseHero = false;
 void loop() {
   switch (chapter)
   {
@@ -243,6 +245,7 @@ void loop() {
         if (waitButtonAndReturnYesButton())
         {
           printer.println(F("You decided to parry the hit\nhope that the shield resist..."));
+          defenseHero = true;
           delay(veryLongDelayPrinter);
           changeChapter(defensePosition, attackPosition, walkPosition, ENEMYATTACK);
         }
@@ -256,15 +259,31 @@ void loop() {
       }
     case ENEMYATTACK:
       {
+        printer.println(F("URZUNTUM uses his shield to attack you,\nit's a really speed and powerful attack\n"));
+        delay(longDelayPrinter);
+        if (defenseHero)
+        {
+          if(procedureParring())
+          {
+            changeChapter(basePosition, walkPosition, walkPosition, YOUDIE);
+            return;
+          }
+
+        }
+        else
+        {
+
+        }
         enemyAdvantageP = false;
         break;
       }
 
     case YOUDIE:
       {
-        printer.println(F("So, you die!\nI suppose that is a thing that could\nhappen but honestly i programmed this game\nin a way"
-                          "to avoid this, so\ncongratulations|\n\n\nI almost forgot to tell you that right now URZUNTUM is playing with you dead body\n it is so cute)\n."
-                          "Your adventure is over, now is the time to cut\nyour paper and find a good place to conserve it\n Press any button to restart the Adventure.\n\n\n\n\n\n---------\n\n"));
+        delay(veryLongDelayPrinter);
+        printer.println(F("So, you die!\nI suppose that is a thing that could\nhappen but honestly i programmed this game\nin a way "
+                          "to avoid this, so\ncongratulations|\n\n\nI almost forgot to tell you that right now\nURZUNTUM is playing with your dead body\n (it is so cute)\n."
+                          "Your adventure is over, now it's time to cut\nyour paper and find a good place to conserve it\nPress any button to restart the Adventure.\n\n\n\n\n\n---------\n\n"));
         delay(longDelayPrinter);
         waitButtonAndReturnYesButton();
         changeChapter(basePosition, basePosition, basePosition, SETUP);
@@ -273,9 +292,9 @@ void loop() {
 
     case YOUWIN:
       {
-        delay(5000);
+        delay(veryLongDelayPrinter);
         printer.println(F("You made it!\n\nYou killed URZUNTUM and set free the princess\nShe is so happy that she kiss you\n(but you are not really smart\nand you kept your helmet on head)\n\n\n"
-                          "Your adventure is over, now is the time to cut\nyour paper and find a good place to conserve it\n Press any button to restart the Adventure.\n\n\n\n\n\n---------\n\n"));
+                          "Your adventure is over, now it's time to cut\nyour paper and find a good place to conserve it\nPress any button to restart the Adventure.\n\n\n\n\n\n---------\n\n"));
 
         waitButtonAndReturnYesButton();
         changeChapter(basePosition, basePosition, basePosition, SETUP);
@@ -297,7 +316,6 @@ void loop() {
 
   delay(50);
 }
-
 
 bool waitButtonAndReturnYesButton()
 {
@@ -326,8 +344,6 @@ bool waitButtonAndReturnYesButton()
     oldNoButtonState = noButtonState;
     delay(60);
   }
-
-
 }
 
 void changeChapter(int hero, int enemy, int princess, story newChapter)
@@ -402,8 +418,7 @@ bool enemyShieldHurtYou()//return true if the hero lose a life
   {
     printer.println(F("Unfortunatly a piece of the shield\nfall down and hit your head wounding you."));
     delay(700);
-    heroLoseLife();
-    return true;
+    return heroLoseLife();
   }
   return false;
 }
@@ -449,7 +464,7 @@ void procedureAttackEnemyShield()
 void procedureSmartWalk()
 {
   heroServo.write(walkPosition);
-  delay(100);
+  delay(200);
   if (smartWalk())
     changeChapter(walkPosition, defensePosition, walkPosition, ADVANTAGEPOSITION);
   else
@@ -479,4 +494,23 @@ void procedureQuickAttack()
   printer.println(F("As was to be expected you miss URZUNTUM\nand now is in a advantage position"));
   delay(1150);
   changeChapter(attackPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
+}
+
+const int parringPoint = 27;
+bool procedureParring()
+{
+  defenseHero = false;
+
+  if (heroShield > 0)
+    heroShield--;
+  long randNumber = random(100);
+
+  if (randNumber < (maxHeroShield - heroShield) * riskPoint)
+  {
+    printer.println(F("The URZUNTUM hit is such power\nthat your shield was not able to protect you\n"));
+    delay(700);
+    return heroLoseLife();
+  }
+  printer.println(F("The shield protected you.\nBut off course has suffered damages.\n"));
+  return false;
 }
