@@ -104,13 +104,15 @@ void setup() {
 
 bool defenseHero = false;
 void loop() {
+  delay(40);
   switch (chapter)
   {
     case INIT:
       {
         printer.println(F("Oh noo!\n The princess was kidnapped by the barbarian's boss  URZUNTUM!\n What you wanna do?"));
+        delay(500);
         printer.println(F("Press Green to accept the quest\nPress Red to stay at home and play castle crushers."));
-        delay(200);
+        delay(longDelayPrinter);
         bool acceptQuest = waitButtonAndReturnYesButton();
         if (acceptQuest)
           changeChapter(walkPosition, basePosition, basePosition, GOINGTOSAVEPRINCESS);
@@ -122,7 +124,7 @@ void loop() {
     case GOINGTOSAVEPRINCESS:
       {
         printer.println(F("Fuck yeah! let'go to kick some barbarians ass and save the princess!"));
-        delay(2500);
+        delay(longDelayPrinter);
         changeChapter(walkPosition, basePosition, walkPosition, ENEMYCAMP);
         break;
       }
@@ -130,7 +132,7 @@ void loop() {
     case GOINGEQUALLY:
       {
         printer.println(F("Are you serious?\nHow i suppose to continue the story if you choose to stay at Home?\nTake your sword and shield and go to save the princess, idiot."));
-        delay(2500);
+        delay(longDelayPrinter);
         changeChapter(walkPosition, basePosition, walkPosition, ENEMYCAMP);
         break;
       }
@@ -270,7 +272,7 @@ void loop() {
             changeChapter(basePosition, walkPosition, walkPosition, YOUDIE);
             return;
           }
-
+          procedureUrzuntumChoice(defensePosition);
         }
         else
         {
@@ -280,6 +282,7 @@ void loop() {
             changeChapter(basePosition, walkPosition, walkPosition, YOUDIE);
             return;
           }
+          procedureUrzuntumChoice(walkPosition);
         }
         enemyAdvantageP = false;
         break;
@@ -552,7 +555,23 @@ bool procedureDodge()
     printer.println(F("WAS ABLE TO DODGE\n\nIt's incredible, you did not receive any damage!"));
     return false;
   }
-  printer.println(F("Was not enough fast to dodge it:(\nthis hit wounded you.\n"));
+  printer.println(F("Was not enough fast to dodge it :(\n\nthis hit wounded you.\n"));
   delay(shortDelayPrinter);
   return heroLoseLife();
+}
+
+
+void procedureUrzuntumChoice(int heroPosition)
+{
+  long randNumber = random(100);
+  if(randNumber < 20 + (maxEnemyLife - enemyLife) * 12)
+  {
+      changeChapter(heroPosition, walkPosition, walkPosition, ENEMYMOVE);
+      return;
+  }
+    if(randNumber < 10 + (maxEnemyLife - enemyLife) * 18)
+  {
+      changeChapter(heroPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
+  }
+  changeChapter(heroPosition, defensePosition, walkPosition, ENEMYDEFENSE);
 }
