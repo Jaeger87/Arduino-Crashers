@@ -572,6 +572,7 @@ void procedureUrzuntumChoice(int heroPosition)
     if(randNumber < 10 + (maxEnemyLife - enemyLife) * 18)
   {
       changeChapter(heroPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
+      return;
   }
   changeChapter(heroPosition, defensePosition, walkPosition, ENEMYDEFENSE);
 }
