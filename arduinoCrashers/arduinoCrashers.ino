@@ -53,14 +53,10 @@ const int pointsEnemyMove = 28;
 void setup() {
   Serial.begin(9600);
 
-  // This line is for compatibility with the Adafruit IotP project pack,
-  // which uses pin 2 as a spare grounding point.  You only need this if
-  // wired up the same way (w/3-pin header into pins 4/3/2):
-  pinMode(2, OUTPUT); digitalWrite(2, LOW);
+
 
   // NOTE: SOME PRINTERS NEED 9600 BAUD instead of 19200, check test page.
-  mySerial.begin(19200);  // Initialize SoftwareSerial
-  //Serial1.begin(19200); // Use this instead if using hardware serial
+  mySerial.begin(9600);  // Initialize SoftwareSerial
   printer.begin();        // Init printer (same regardless of serial type)
   pinMode(yesButtonPin, INPUT);
   pinMode(noButtonPin, INPUT);
