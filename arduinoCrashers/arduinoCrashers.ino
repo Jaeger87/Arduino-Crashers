@@ -19,10 +19,10 @@ const int princessPin = 10;
 const int yesButtonPin = 5;
 const int noButtonPin = 6;
 
-const int basePosition = 0;
-const int walkPosition = 90;
-const int defensePosition = 180;
-const int attackPosition = 270;
+const int basePosition = 10;
+const int walkPosition = 65;
+const int defensePosition = 120;
+const int attackPosition = 170;
 
 const int shortDelayPrinter = 1500;
 const int longDelayPrinter = 3500;
