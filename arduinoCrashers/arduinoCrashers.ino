@@ -275,7 +275,11 @@ void loop() {
         else
         {
 
-
+          if (procedureDodge())
+          {
+            changeChapter(basePosition, walkPosition, walkPosition, YOUDIE);
+            return;
+          }
         }
         enemyAdvantageP = false;
         break;
@@ -534,18 +538,21 @@ bool procedureParring()
 }
 
 const int dodgeShieldPoint = 10;
+const int baseDodgePoints = 12;
 bool procedureDodge()
 {
+  printer.println(F("Urzuntum raise up his shield up his head\nand with all of his strenght hits the ground, you...\n\n\n"));
+  delay(shortDelayPrinter);
   long randNumber = random(100);
   int malusPosition = 0;
   if (enemyAdvantageP)
     malusPosition += 31;
-  if (randNumber < (12 + (maxHeroShield - heroShield) * dodgeShieldPoint) - malusPosition + (maxEnemyLife - enemyLife) * 8)
+  if (randNumber < (baseDodgePoints + (maxHeroShield - heroShield) * dodgeShieldPoint) - malusPosition + (maxEnemyLife - enemyLife) * 8)
   {
-    printer.println(F("The shield protected you.\nBut off course has suffered damages.\n"));
+    printer.println(F("WAS ABLE TO DODGE\n\nIt's incredible, you did not receive any damage!"));
     return false;
   }
-  printer.println(F("The URZUNTUM hit is such power\nthat your shield was not able to protect you\n"));
+  printer.println(F("Was not enough fast to dodge it:(\nthis hit wounded you.\n"));
   delay(shortDelayPrinter);
   return heroLoseLife();
 }
