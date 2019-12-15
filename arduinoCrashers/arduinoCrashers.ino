@@ -175,7 +175,7 @@ void loop() {
           delay(longDelayPrinter);
           if (hitEnemy())
           {
-            changeChapter(basePosition, basePosition, defensePosition, YOUWIN);
+            changeChapter(basePosition, basePosition, attackPosition, YOUWIN);
           }
 
           changeChapter(attackPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
@@ -197,7 +197,7 @@ void loop() {
           delay(longDelayPrinter);
           if (hitEnemy())
           {
-            changeChapter(basePosition, basePosition, defensePosition, YOUWIN);
+            changeChapter(basePosition, basePosition, attackPosition, YOUWIN);
           }
 
           changeChapter(attackPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
@@ -451,7 +451,7 @@ void procedureAttackEnemyShield()
   delay(shortDelayPrinter);
   if (hitEnemyShield())
   {
-    changeChapter(basePosition, basePosition, defensePosition, YOUWIN);
+    changeChapter(basePosition, basePosition, attackPosition, YOUWIN);
   }
   else if (enemyShieldHurtYou())
   {
@@ -503,10 +503,10 @@ void procedureQuickAttack()
   if (randNumber < (heroLife * quickLifePoints) - (enemyLife * quickEnemyLifePoints) - (heroShield * quickShieldPoint) + (enemyShield * quickEnemyShieldPoint))
   {
     printer.println(F("Oh WOW *_*\nYou really hit URZUNTUM\nYou are very speed but most of all lucky\n\n(believe me, i programmed this game)."));
-    delay(shortDelayPrinter);
+    delay(700);
     if (enemyLoseLife())
     {
-      changeChapter(basePosition, basePosition, defensePosition, YOUWIN);
+      changeChapter(basePosition, basePosition, attackPosition, YOUWIN);
       return;
     }
   }
