@@ -1,3 +1,23 @@
+/*
+  Arduino crashers
+
+  Arduino crashers è un gioco realizzato utilizzando un arduino, una stampante termica, due bottoni per quanto riguarda l'essenziale
+  6 led e 3 servomotori per la parte "estetica".
+
+  Nel gioco il giocatore interpreta il ruolo di un cavaliere che deve salvare una principessa, per farlo dovrà combattere contro il capo dei barbari.
+
+  La storia del gioco viene raccontata testualmente tramite la stampante termica, il giocatore dovrà prendere delle decisioni nel gioco
+  utilizzando i due bottoni verde e rosso. i 3 servo motori hanno un piccolo sistema che mostra i personaggi in pose diverse che cambiano
+  a seconda di quello che succede nel gioco. I led rappresentano le vite del giocatore e del nemico da battere, se il giocatore perde tutti i led (3 vite)
+  Perde e il gioco termina in game over. Altrimenti se elimina le vite dell'avversario il giocatore vince e salva la principessa. 
+
+  Per il circuito fare riferimento alla relazione e allo schema fritzing
+
+  created 2019
+  by Andrea Rosati a.k.a. Jaeger87 <https://github.com/Jaeger87>
+*/
+
+//Caricamento librerie.
 #include "Adafruit_Thermal.h"
 #include "SoftwareSerial.h"
 #include <Servo.h>
