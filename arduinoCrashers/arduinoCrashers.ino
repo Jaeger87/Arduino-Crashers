@@ -9,7 +9,7 @@
   La storia del gioco viene raccontata testualmente tramite la stampante termica, il giocatore dovrà prendere delle decisioni nel gioco
   utilizzando i due bottoni verde e rosso. i 3 servo motori hanno un piccolo sistema che mostra i personaggi in pose diverse che cambiano
   a seconda di quello che succede nel gioco. I led rappresentano le vite del giocatore e del nemico da battere, se il giocatore perde tutti i led (3 vite)
-  Perde e il gioco termina in game over. Altrimenti se elimina le vite dell'avversario il giocatore vince e salva la principessa. 
+  Perde e il gioco termina in game over. Altrimenti se elimina le vite dell'avversario il giocatore vince e salva la principessa.
 
   Per il circuito fare riferimento alla relazione e allo schema fritzing
 
@@ -26,34 +26,35 @@
 SoftwareSerial mySerial(RX_PIN, TX_PIN); // Declare SoftwareSerial obj first
 Adafruit_Thermal printer(&mySerial);     // Pass addr to printer constructor
 
-Servo myservo;
-
+//Dichiarazione degli oggetti per l'utilizzo dei servo motori
 Servo heroServo;
 Servo enemyServo;
 Servo princessServo;
 
+//Pin usati dai servo
 const int heroPin = 8;
 const int enemyPin = 9;
 const int princessPin = 10;
-
+//Pin usati dai due bottoni, yes è il verde, no il rosso
 const int yesButtonPin = 5;
 const int noButtonPin = 6;
-
+//Le posizioni che possono assumere i servo, sono uguali per tutti e tre i servo.
 const int basePosition = 10;
 const int walkPosition = 65;
 const int defensePosition = 120;
 const int attackPosition = 170;
-
+//I delay per aspettare che la stampante termica abbia finito di stampare (o quasi).
 const int shortDelayPrinter = 1500;
 const int longDelayPrinter = 3500;
 const int veryLongDelayPrinter = 7500;
+//pin dei led divisi per personaggio
 int heroLifeLedPin[3] = {11, 12, 13};
 int enemyLifeLedPin[3] = {14, 15, 16};
-
+//variabili per gestire la vita dei personaggi
 int heroLife = 3;
 const int maxEnemyLife = 3;
 int enemyLife = maxEnemyLife;
-
+//Qui ci sono alcune variabili per gestire alcune dinamiche del gioco quali la gestione dello scudo e se un personaggio si trova in una posizione di vantaggio.
 bool enemyAdvantageP = false;
 bool playerAdvantageP = false;
 const int maxEnemyShield = 7;
@@ -61,6 +62,7 @@ const int maxHeroShield = 3;
 int heroShield = maxHeroShield;
 int enemyShield = maxEnemyShield;
 
+//Dichiarazione dei capitoli della storia (stati in cui si può trovare il gioco)
 enum  story {
   SETUP, INIT, GOINGTOSAVEPRINCESS, GOINGEQUALLY, ENEMYCAMP, HEROICENTRY, STEALTHENTRY, ADVANTAGEPOSITION, ENEMYDEFENSE, ENEMYPREPARETOATTACK, ENEMYMOVE,
   ENEMYATTACK, YOUDIE, YOUWIN
@@ -68,14 +70,8 @@ enum  story {
 story chapter = INIT;
 
 
-const int pointsEnemyMove = 28;
-
 void setup() {
   Serial.begin(9600);
-
-
-
-  // NOTE: SOME PRINTERS NEED 9600 BAUD instead of 19200, check test page.
   mySerial.begin(9600);  // Initialize SoftwareSerial
   printer.begin();        // Init printer (same regardless of serial type)
   pinMode(yesButtonPin, INPUT);
@@ -99,9 +95,9 @@ void setup() {
 
   heroServo.attach(8);
   enemyServo.attach(9);
-  princessServo.attach(10,0,180);// è speciale il servo XD
+  princessServo.attach(10, 0, 180); // è speciale il servo XD (mezzo scassato)
 
-
+  //I personaggi iniziano il gioco nella base position che significa non visibili
   heroServo.write(basePosition);
   enemyServo.write(basePosition);
   princessServo.write(basePosition);
@@ -114,8 +110,8 @@ void setup() {
   enemyShield = maxEnemyShield;
 
 
-  delay(4000);
-  changeChapter(walkPosition, basePosition, basePosition, INIT);
+  delay(8000);
+  changeChapter(walkPosition, basePosition, basePosition, INIT);//Il gioco così passa allo stato iniziale.
 }
 
 bool defenseHero = false;
@@ -126,7 +122,7 @@ void loop() {
     case INIT:
       {
         printer.println(F("Oh noo!\n The princess was kidnapped by the barbarian's boss  URZUNTUM!\n What you wanna do?"));
-        delay(500);
+        delay(shortDelayPrinter);
         printer.println(F("Press Green to accept the quest\nPress Red to stay at home and play castle crushers."));
         delay(longDelayPrinter);
         bool acceptQuest = waitButtonAndReturnYesButton();
@@ -465,6 +461,7 @@ bool smartWalk()
   return false;
 }
 
+const int pointsEnemyMove = 28;
 void procedureAttackEnemyShield()
 {
   heroServo.write(attackPosition);
@@ -580,15 +577,15 @@ bool procedureDodge()
 void procedureUrzuntumChoice(int heroPosition)
 {
   long randNumber = random(100);
-  if(randNumber < 20 + (maxEnemyLife - enemyLife) * 12)
+  if (randNumber < 20 + (maxEnemyLife - enemyLife) * 12)
   {
-      changeChapter(heroPosition, walkPosition, walkPosition, ENEMYMOVE);
-      return;
+    changeChapter(heroPosition, walkPosition, walkPosition, ENEMYMOVE);
+    return;
   }
-    if(randNumber < 10 + (maxEnemyLife - enemyLife) * 18)
+  if (randNumber < 10 + (maxEnemyLife - enemyLife) * 18)
   {
-      changeChapter(heroPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
-      return;
+    changeChapter(heroPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
+    return;
   }
   changeChapter(heroPosition, defensePosition, walkPosition, ENEMYDEFENSE);
 }
