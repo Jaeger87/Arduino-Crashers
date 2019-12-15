@@ -79,7 +79,7 @@ void setup() {
 
   heroServo.attach(8);
   enemyServo.attach(9);
-  princessServo.attach(10);
+  princessServo.attach(10,0,180);// è speciale il servo XD
 
 
   heroServo.write(basePosition);
