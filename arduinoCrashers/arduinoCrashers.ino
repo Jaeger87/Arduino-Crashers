@@ -49,7 +49,7 @@ const int longDelayPrinter = 1500;
 const int veryLongDelayPrinter = 4500;
 //pin dei led divisi per personaggio
 int heroLifeLedPin[3] = {11, 12, 13};
-int enemyLifeLedPin[3] = {14, 15, 7};
+int enemyLifeLedPin[3] = {7, 15, 14};
 //variabili per gestire la vita dei personaggi
 int heroLife = 3;
 const int maxEnemyLife = 3;
@@ -110,7 +110,7 @@ void setup() {
   enemyShield = maxEnemyShield;
 
 
-  delay(8000);
+  delay(4000);
   changeChapter(walkPosition, basePosition, basePosition, INIT);//Il gioco così passa allo stato iniziale.
 }
 
@@ -548,7 +548,7 @@ bool smartWalk()
     delay(shortDelayPrinter);
     return true;
   }
-  printer.println(F("You are not so fast\nURZUNTUM understand your move and walks to\ncancel your advantage.\n\n"));
+  printer.println(F("You are not so fast\nURZUNTUM understand your move\nand walks to cancel\nyour advantage.\n\n"));
   return false;
 }
 
