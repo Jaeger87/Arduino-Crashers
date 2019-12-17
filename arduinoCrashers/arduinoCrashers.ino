@@ -205,7 +205,7 @@ void loop() {
       {
         printer.println(F("Like a shadow in the night\nyou enter in the enemy camp and nobody noticed\nsilently you kill all the guards\n"
                           "and enter where they keep the\nprincess, when you enter the\nroom you see the princess\nbut is not alone\nURZUNTUM is with she.\n"
-                          "You come closer and place\non URZUNTUM shoulders, where you want to attack?\n"
+                          "You come closer and place\non URZUNTUM shoulders, where you\nwant to attack?\n"
                           "Press green to direct attack\nURZUNTUM body\nPress Red to attack URUZUNTUM on\nhis shield\n\n"));
 
         if (waitButtonAndReturnYesButton())
@@ -215,6 +215,7 @@ void loop() {
           if (hitEnemy())
           {
             changeChapter(basePosition, basePosition, attackPosition, YOUWIN);
+            return;
           }
 
           changeChapter(attackPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
@@ -232,7 +233,7 @@ void loop() {
     case ADVANTAGEPOSITION:
       {
         playerAdvantageP = false;
-        printer.println(F("It's the best chance to attack!\nPress green to direct attack URZUNTUM body\nPress Red to attack URUZUNTUM on his shield\n\n"));
+        printer.println(F("It's the best chance to attack!\nPress green to direct attack\nURZUNTUM body\nPress Red to attack URUZUNTUM on\nhis shield\n\n"));
         if (waitButtonAndReturnYesButton())
         {
           heroServo.write(attackPosition);
@@ -240,6 +241,7 @@ void loop() {
           if (hitEnemy())
           {
             changeChapter(basePosition, basePosition, attackPosition, YOUWIN);
+            return;
           }
 
           changeChapter(attackPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
@@ -542,7 +544,7 @@ bool smartWalk()
   if (randNumber < (walkLifePoints * heroLife) - (walkShieldPoint * heroShield))
   {
     playerAdvantageP = true;
-    printer.println(F("You move very fast and\nURZUNTUM stays in defense position."));
+    printer.println(F("You move very fast and\nURZUNTUM stays in defense\nposition."));
     delay(shortDelayPrinter);
     return true;
   }
@@ -561,10 +563,12 @@ void procedureAttackEnemyShield()
   if (hitEnemyShield())
   {
     changeChapter(basePosition, basePosition, attackPosition, YOUWIN);
+    return;
   }
   else if (enemyShieldHurtYou())
   {
     changeChapter(basePosition, walkPosition, walkPosition, YOUDIE);
+    return;
   }
 
   delay(shortDelayPrinter);
@@ -619,7 +623,7 @@ void procedureQuickAttack()
   long randNumber = random(100);
   if (randNumber < (heroLife * quickLifePoints) - (enemyLife * quickEnemyLifePoints) - (heroShield * quickShieldPoint) + (enemyShield * quickEnemyShieldPoint))
   {
-    printer.println(F("Oh WOW *_*\nYou really hit URZUNTUM\nYou are very speed but most of all lucky\n\n(believe me, i programmed this game).\n\n"));
+    printer.println(F("Oh WOW *_*\nYou really hit URZUNTUM\nYou are very speed but most of\nall lucky\n\n(believe me, i programmed\nthis game).\n\n"));
     delay(shortDelayPrinter);
     if (enemyLoseLife())
     {
