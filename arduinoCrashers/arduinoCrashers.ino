@@ -352,7 +352,7 @@ void loop() {
         delay(veryLongDelayPrinter);
         printer.println(F("So, you die!\nI suppose that is a thing that\ncould happened but honestly\ni programmed this game\nin a way "
                           "to avoid this, so\ncongratulations|\n\n\nI almost forgot to tell you that\nright now URZUNTUM is playing\nwith your dead body\n\n(it is so cute)\n\n"
-                          "Your adventure is over, now\nit's time to cut your paper\nand find a good place to\nconserve it\nPress any button to restart the Adventure.\n\n\n\n\n\n---------\n\n"));
+                          "Your adventure is over, now\nit's time to cut your paper\nand find a good place to\nconserve it\nPress any button to restart the Adventure.\n\n\n\n\n\n-------------\n\n"));
         delay(longDelayPrinter);
         waitButtonAndReturnYesButton();
         changeChapter(basePosition, basePosition, basePosition, SETUP);
@@ -365,8 +365,8 @@ void loop() {
     case YOUWIN:
       {
         delay(veryLongDelayPrinter);
-        printer.println(F("You made it!\n\nYou killed URZUNTUM and set free the princess\nShe is so happy that she kiss you\n(but you are not really smart\nand you kept your helmet on head)\n\n\n"
-                          "Your adventure is over, now it's time to cut\nyour paper and find a good place to conserve it\nPress any button to restart the Adventure.\n\n\n\n\n\n---------\n\n"));
+        printer.println(F("\n\nYou made it!\n\nYou killed URZUNTUM and set free\nthe princess\nShe is so happy that she\nkiss you (but you\nare not really smart\nand you kept your helmet\non your head)\n\n\n"
+                          "Your adventure is over, now\nit's time to cut your paper\nand find a good place to\nconserve it\nPress any button to restart the Adventure.\n\n\n\n\n\n-------------\n\n"));
 
         waitButtonAndReturnYesButton();
         changeChapter(basePosition, basePosition, basePosition, SETUP);
@@ -466,7 +466,7 @@ bool enemyLoseLife()
 {
   enemyLife--;
   digitalWrite(enemyLifeLedPin[enemyLife], LOW);
-  if (enemyLoseLife == 0)
+  if (enemyLife <= 0)
     return true;
 
   return false;
