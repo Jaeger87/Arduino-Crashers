@@ -294,7 +294,7 @@ void loop() {
     case ENEMYPREPARETOATTACK:
       {
         printer.println(F("URZUNTUM is ready to attack you at any moment.\nWhat you gonna do?"
-                          "Press green to raise your shield\nPress red to try to dodge the hit\n\n"));
+                          "Press green to raise your shield\nPress red to try to dodge\nthe hit\n\n"));
         if (waitButtonAndReturnYesButton())
         {
           printer.println(F("You decided to parry the hit\nhope that the shield resist...\n\n"));
@@ -317,7 +317,7 @@ void loop() {
     */
     case ENEMYATTACK:
       {
-        printer.println(F("URZUNTUM uses his shield to attack you,\nit's a really speed and powerful\nattack\n\n\n"));
+        printer.println(F("URZUNTUM uses his shield to\nattack you,\nit's a really speed and powerful\nattack\n\n\n"));
         delay(longDelayPrinter);
         if (defenseHero)
         {
@@ -397,25 +397,33 @@ void loop() {
 bool waitButtonAndReturnYesButton()
 {
   bool waitingForChoices = true;
-  bool oldyesButtonState = false;
-  int yesButtonState = 0;
-  int noButtonState = 0;
-  int oldYesButtonState = 0;
-  int oldNoButtonState = 0;
+  int yesButtonState = 1;
+  int noButtonState = 1;
+  int oldYesButtonState = 1;
+  int oldNoButtonState = 1;
+  Serial.println("While bottoni");
   while (waitingForChoices)
   {
     yesButtonState = digitalRead(yesButtonPin);
     noButtonState = digitalRead(noButtonPin);
 
+
+
     if (yesButtonState != oldYesButtonState)
     {
       if (yesButtonState == HIGH)
+      {
+        Serial.println("YES!");
         return true;
+      }
     }
     if (noButtonState != oldNoButtonState)
     {
       if (noButtonState == HIGH)
+      {
+        Serial.println("NO!");
         return false;
+      }
     }
     oldYesButtonState = yesButtonState;
     oldNoButtonState = noButtonState;
@@ -544,8 +552,8 @@ bool smartWalk()
 
 const int pointsEnemyMove = 28;
 /*
- * La procedura che viene chiamata quando il giocatore decide di attaccare il nemico sullo scudo
- */
+   La procedura che viene chiamata quando il giocatore decide di attaccare il nemico sullo scudo
+*/
 void procedureAttackEnemyShield()
 {
   heroServo.write(attackPosition);
@@ -569,8 +577,8 @@ void procedureAttackEnemyShield()
 }
 
 /*
- * Qui il nemico decide cosa fare dopo che è stato in posizione difensiva.
- */
+   Qui il nemico decide cosa fare dopo che è stato in posizione difensiva.
+*/
 void procedureUrzuntumDecision(int heroPosition)
 {
   printer.println(F("What will gonna do URZUNTUM...\n\n"));
@@ -583,8 +591,8 @@ void procedureUrzuntumDecision(int heroPosition)
     changeChapter(heroPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
 }
 /*
- * Funzione che viene chiamata se il giocatore decide di eseguire la camminata "furba".
- */
+   Funzione che viene chiamata se il giocatore decide di eseguire la camminata "furba".
+*/
 void procedureSmartWalk()
 {
   heroServo.write(walkPosition);
@@ -600,9 +608,9 @@ const int quickShieldPoint = 2;
 const int quickEnemyLifePoints = 1;
 const int quickEnemyShieldPoint = 5;
 /*
- * Qui viene calcolato se l'attacco rapido quando il nemico si muove va a buon fine
- * Molto difficile che succeda.
- */
+   Qui viene calcolato se l'attacco rapido quando il nemico si muove va a buon fine
+   Molto difficile che succeda.
+*/
 void procedureQuickAttack()
 {
   heroServo.write(attackPosition);
@@ -647,7 +655,7 @@ bool procedureParring()
   }
   if (heroShield > 0)
     heroShield--;
-  printer.println(F("The URZUNTUM hit is such power\nthat your shield was not able to protect you\n\n\n"));
+  printer.println(F("The URZUNTUM hit is such power\nthat your shield was not able to\nprotect you\n\n\n"));
   delay(shortDelayPrinter);
   return heroLoseLife();
 }
