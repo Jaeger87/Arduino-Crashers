@@ -49,7 +49,7 @@ const int longDelayPrinter = 1500;
 const int veryLongDelayPrinter = 4500;
 //pin dei led divisi per personaggio
 int heroLifeLedPin[3] = {11, 12, 13};
-int enemyLifeLedPin[3] = {14, 15, 16};
+int enemyLifeLedPin[3] = {14, 15, 7};
 //variabili per gestire la vita dei personaggi
 int heroLife = 3;
 const int maxEnemyLife = 3;
@@ -471,7 +471,7 @@ bool enemyLoseLife()
 }
 
 const int riskPoint = 8;
-const int successPointHitShield = 12;
+const int successPointHitShield = 16;
 /*
    Funzione che viene chiamata quando il giocatore colpisce lo scudo nemico.
    In base a quanto è danneggiato lo scudo nemico c'è una probabilità che il colpo ferisca il nemico oltre a rovinargli lo scudo.
@@ -479,7 +479,7 @@ const int successPointHitShield = 12;
 bool hitEnemyShield()//return true if you kill the enemy
 {
   long randNumber = random(100);
-  if (randNumber < 8 + (maxEnemyShield - enemyShield) * (successPointHitShield - (maxEnemyShield - enemyShield)))
+  if (randNumber < 10 + (maxEnemyShield - enemyShield) * (successPointHitShield - (maxEnemyShield - enemyShield)))
   {
     printer.println(F("Your hit is such power that not only\ndamage URZUNTUM's shield\nbut even hits him.\n\n"));
     delay(shortDelayPrinter);
@@ -490,8 +490,8 @@ bool hitEnemyShield()//return true if you kill the enemy
 }
 
 
-const int heroLifePointHit = 24;
-const int enemyLifePointHit = 7;
+const int heroLifePointHit = 27;
+const int enemyLifePointHit = 6;
 /*
    Funzione che viene chiamata se il giocatore attacca direttamente il nemico.
    In base alla vita del giocatore e del nemico viene calcolata la probabilità di mancare o colpire il nemico.
@@ -531,7 +531,7 @@ bool enemyShieldHurtYou()//return true if the hero lose a life
   return false;
 }
 
-const int walkLifePoints = 16;
+const int walkLifePoints = 19;
 const int walkShieldPoint = 4;
 /*
   Qui il giocatore tenta di mettersi in una posizione favorevole per colpire il nemico.
@@ -691,12 +691,12 @@ bool procedureDodge()
 void procedureUrzuntumChoice(int heroPosition)
 {
   long randNumber = random(100);
-  if (randNumber < 20 + (maxEnemyLife - enemyLife) * 12)
+  if (randNumber < 18 + (maxEnemyLife - enemyLife) * 10)
   {
     changeChapter(heroPosition, walkPosition, walkPosition, ENEMYMOVE);
     return;
   }
-  if (randNumber < 10 + (maxEnemyLife - enemyLife) * 18)
+  if (randNumber < 8 + (maxEnemyLife - enemyLife) * 16)
   {
     changeChapter(heroPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
     return;
