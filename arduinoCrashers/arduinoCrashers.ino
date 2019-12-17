@@ -125,9 +125,9 @@ void loop() {
     */
     case INIT:
       {
-        printer.println(F("Oh noo!\n The princess was kidnapped by the barbarian's boss  URZUNTUM!\n What you wanna do?\n\n"));
+        printer.println(F("Oh noo!\nThe princess was kidnapped by\n the barbarian's boss  URZUNTUM!\nWhat you wanna do?\n\n"));
         delay(shortDelayPrinter);
-        printer.println(F("Press Green to accept the quest\nPress Red to stay at home and play castle crushers.\n\n"));
+        printer.println(F("Press Green to accept the quest\nPress Red to stay at home and play\n castle crushers.\n\n"));
         delay(longDelayPrinter);
         bool acceptQuest = waitButtonAndReturnYesButton();
         if (acceptQuest)
@@ -153,7 +153,7 @@ void loop() {
     */
     case GOINGEQUALLY:
       {
-        printer.println(F("Are you serious?\nHow i suppose to continue the story if you choose to stay at Home?\nTake your sword and shield and go to save the princess, idiot.\n\n"));
+        printer.println(F("Are you serious?\nHow i suppose to continue the\nstory if you choose to stay\nat Home?\nTake your sword and shield\nand go to save the princess, idiot.\n\n"));
         delay(longDelayPrinter);
         changeChapter(walkPosition, basePosition, walkPosition, ENEMYCAMP);
         break;
@@ -166,9 +166,9 @@ void loop() {
     */
     case ENEMYCAMP:
       {
-        printer.println(F("You are in front the enemy camp\nFrom your position ypu can see the princess, they bound her on a pale\nWho knows what will be her end if you don't save her!\n"
-                          "Now, you have to take a decision.\nYou can break through the enemy gates and go forward with your strenght\n Or use your stealth skill and try to enter without the guards noticing.\n"
-                          "Press green if you are brave, Press Red if you believe to be sly.\n\n"));
+        printer.println(F("You are in front the enemy camp\nFrom your position you can see\nthe princess, they bound her on a pale\nWho knows what will be her end\nif you don't save her!\n"
+                          "Now, you have to take a decision\n\nYou can break through the enemy gates and go forward with your\nstrenght or use your stealth skill and\ntry to enter without the guards noticing.\n"
+                          "Press green if you are brave\nPress Red if you believe\nto be smart.\n\n"));
         delay(800);
         if (waitButtonAndReturnYesButton())
           changeChapter(walkPosition, defensePosition, walkPosition, HEROICENTRY);
@@ -183,9 +183,9 @@ void loop() {
     */
     case HEROICENTRY:
       {
-        printer.println(F("Once you enter in the camp you kill quickly two guards and the others soldiers run away from fear,\n"
-                          "when you reach the princess URZUNTUM appears in his defence position. What you gonna do?\n"
-                          "Press Green to attack\nPress Red to try to go round URZUNTUM\nand place at his shoulders.\n\n"));
+        printer.println(F("Once you enter in the camp you\nkill quickly two guards and the\nothers soldiers run away\nfrom fear,\n"
+                          "When you reach the princess\nURZUNTUM appears in his defence\nposition. What you gonna do?\n"
+                          "Press Green to attack\nPress Red to try to go round\nURZUNTUM and place at his\nshoulders.\n\n"));
         delay(longDelayPrinter);
         if (waitButtonAndReturnYesButton())
         {
@@ -203,7 +203,7 @@ void loop() {
     */
     case STEALTHENTRY:
       {
-        printer.println(F("Like a shadow in the night you enter in the enemy camp and nobody noticed\nsilently ypou kill all the guards\n"
+        printer.println(F("Like a shadow in the night\nyou enter in the enemy camp and nobody noticed\nsilently you kill all the guards\n"
                           "and enter where they keep the princess, when you enter the room\nyou see the princess but is not alone\nURZUNTUM is with she.\n"
                           "You come closer and place\non URZUNTUM shoulders, where you want to attack?"
                           "Press green to direct attack URZUNTUM body\nPress Red to attack URUZUNTUM on his shield\n\n"));
@@ -317,7 +317,7 @@ void loop() {
     */
     case ENEMYATTACK:
       {
-        printer.println(F("URZUNTUM uses his shield to attack you,\nit's a really speed and powerful attack\n\n\n"));
+        printer.println(F("URZUNTUM uses his shield to attack you,\nit's a really speed and powerful\nattack\n\n\n"));
         delay(longDelayPrinter);
         if (defenseHero)
         {
@@ -348,9 +348,9 @@ void loop() {
     case YOUDIE:
       {
         delay(veryLongDelayPrinter);
-        printer.println(F("So, you die!\nI suppose that is a thing that could\nhappen but honestly i programmed this game\nin a way "
-                          "to avoid this, so\ncongratulations|\n\n\nI almost forgot to tell you that right now\nURZUNTUM is playing with your dead body\n (it is so cute)\n."
-                          "Your adventure is over, now it's time to cut\nyour paper and find a good place to conserve it\nPress any button to restart the Adventure.\n\n\n\n\n\n---------\n\n"));
+        printer.println(F("So, you die!\nI suppose that is a thing that\ncould happened but honestly\ni programmed this game\nin a way "
+                          "to avoid this, so\ncongratulations|\n\n\nI almost forgot to tell you that\nright now URZUNTUM is playing\nwith your dead body\n\n(it is so cute)\n\n"
+                          "Your adventure is over, now\nit's time to cut your paper\nand find a good place to conserve it\nPress any button to restart the Adventure.\n\n\n\n\n\n---------\n\n"));
         delay(longDelayPrinter);
         waitButtonAndReturnYesButton();
         changeChapter(basePosition, basePosition, basePosition, SETUP);
@@ -640,7 +640,7 @@ bool procedureParring()
     malusPosition += 31;
   if (randNumber < 9 + (heroShield * parringPoint) - malusPosition)
   {
-    printer.println(F("The shield protected you.\nBut off course has suffered damages.\n\n\n"));
+    printer.println(F("The shield protected you.\nBut off course has suffered\ndamages.\n\n\n"));
     if (heroShield > 0)
       heroShield--;
     return false;
