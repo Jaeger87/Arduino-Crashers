@@ -44,9 +44,9 @@ const int walkPosition = 65;
 const int defensePosition = 120;
 const int attackPosition = 170;
 //I delay per aspettare che la stampante termica abbia finito di stampare (o quasi).
-const int shortDelayPrinter = 1500;
-const int longDelayPrinter = 3500;
-const int veryLongDelayPrinter = 7500;
+const int shortDelayPrinter = 800;
+const int longDelayPrinter = 1500;
+const int veryLongDelayPrinter = 4500;
 //pin dei led divisi per personaggio
 int heroLifeLedPin[3] = {11, 12, 13};
 int enemyLifeLedPin[3] = {14, 15, 16};
@@ -125,9 +125,9 @@ void loop() {
     */
     case INIT:
       {
-        printer.println(F("Oh noo!\nThe princess was kidnapped by\n the barbarian's boss  URZUNTUM!\nWhat you wanna do?\n\n"));
+        printer.println(F("Oh noo!\nThe princess was kidnapped by\nthe barbarian's boss URZUNTUM!\nWhat you wanna do?\n\n"));
         delay(shortDelayPrinter);
-        printer.println(F("Press Green to accept the quest\nPress Red to stay at home and play\n castle crushers.\n\n"));
+        printer.println(F("Press Green to accept the quest\nPress Red to stay at home and\nplay Castle Crushers.\n\n"));
         delay(longDelayPrinter);
         bool acceptQuest = waitButtonAndReturnYesButton();
         if (acceptQuest)
@@ -142,7 +142,7 @@ void loop() {
     */
     case GOINGTOSAVEPRINCESS:
       {
-        printer.println(F("Fuck yeah! let'go to kick some barbarians ass and save the princess!\n\n"));
+        printer.println(F("Fuck yeah! let'go to kick some\nbarbarians ass and save\nthe princess!\n\n"));
         delay(longDelayPrinter);
         changeChapter(walkPosition, basePosition, walkPosition, ENEMYCAMP);
         break;
@@ -153,7 +153,7 @@ void loop() {
     */
     case GOINGEQUALLY:
       {
-        printer.println(F("Are you serious?\nHow i suppose to continue the\nstory if you choose to stay\nat Home?\nTake your sword and shield\nand go to save the princess, idiot.\n\n"));
+        printer.println(F("Are you serious?\nHow i suppose to continue the\nstory if you choose to stay\nat Home?\nTake your sword and shield\nand go to save the princess\nidiot.\n\n"));
         delay(longDelayPrinter);
         changeChapter(walkPosition, basePosition, walkPosition, ENEMYCAMP);
         break;
@@ -167,7 +167,7 @@ void loop() {
     case ENEMYCAMP:
       {
         printer.println(F("You are in front the enemy camp\nFrom your position you can see\nthe princess, they bound her on a pale\nWho knows what will be her end\nif you don't save her!\n"
-                          "Now, you have to take a decision\n\nYou can break through the enemy gates and go forward with your\nstrenght or use your stealth skill and\ntry to enter without the guards noticing.\n"
+                          "Now, you have to take a decision\n\nYou can break through the enemy gates and go forward with your\nstrenght or use your stealth\nskills and try to enter without\nthe guards noticing.\n"
                           "Press green if you are brave\nPress Red if you believe\nto be smart.\n\n"));
         delay(800);
         if (waitButtonAndReturnYesButton())
@@ -204,9 +204,9 @@ void loop() {
     case STEALTHENTRY:
       {
         printer.println(F("Like a shadow in the night\nyou enter in the enemy camp and nobody noticed\nsilently you kill all the guards\n"
-                          "and enter where they keep the princess, when you enter the room\nyou see the princess but is not alone\nURZUNTUM is with she.\n"
-                          "You come closer and place\non URZUNTUM shoulders, where you want to attack?"
-                          "Press green to direct attack URZUNTUM body\nPress Red to attack URUZUNTUM on his shield\n\n"));
+                          "and enter where they keep the\nprincess, when you enter the\nroom you see the princess\nbut is not alone\nURZUNTUM is with she.\n"
+                          "You come closer and place\non URZUNTUM shoulders, where you want to attack?\n"
+                          "Press green to direct attack\nURZUNTUM body\nPress Red to attack URUZUNTUM on\nhis shield\n\n"));
 
         if (waitButtonAndReturnYesButton())
         {
@@ -256,7 +256,7 @@ void loop() {
     */
     case ENEMYDEFENSE:
       {
-        printer.println(F("URZUNTUM raise his shield and\ngets defensive\nPress Green to attack\nPress Red to try to go round URZUNTUM\nand place at his shoulders.\n\n"));
+        printer.println(F("URZUNTUM raise his shield and\ngets defensive\nPress Green to attack\nPress Red to try to go round\nURZUNTUM and place at\nhis shoulders.\n\n"));
         delay(longDelayPrinter);
         if (waitButtonAndReturnYesButton())
         {
@@ -274,8 +274,8 @@ void loop() {
     */
     case ENEMYMOVE:
       {
-        printer.println(F("URZUNTUM starts to move\nhe want for sure to take a good position\nfor his attack.\n"
-                          "Press Green to move and cancel his advantage\nPress red to do a really quick attack.\n\n"));
+        printer.println(F("URZUNTUM starts to move\nhe want for sure to take a good position for his attack.\n"
+                          "Press Green to move and cancel\nhis advantage\nPress red to do a really\nquick attack.\n\n"));
         delay(longDelayPrinter);
         if (waitButtonAndReturnYesButton())
         {
@@ -293,8 +293,8 @@ void loop() {
     */
     case ENEMYPREPARETOATTACK:
       {
-        printer.println(F("URZUNTUM is ready to attack you at any moment.\nWhat you gonna do?"
-                          "Press green to raise your shield\nPress red to try to dodge\nthe hit\n\n"));
+        printer.println(F("URZUNTUM is ready to attack you at any moment.\nWhat you gonna do?\n\n"
+                          "Press green to raise\nyour shield\nPress red to try to dodge\nthe hit\n\n"));
         if (waitButtonAndReturnYesButton())
         {
           printer.println(F("You decided to parry the hit\nhope that the shield resist...\n\n"));
@@ -304,7 +304,7 @@ void loop() {
         }
         else
         {
-          printer.println(F("A brave decision\nlet's see if it was even quick..."));
+          printer.println(F("A brave decision\nlet's see if it was even quick..\n\n"));
           delay(veryLongDelayPrinter);
           changeChapter(walkPosition, attackPosition, walkPosition, ENEMYATTACK);
         }
@@ -350,7 +350,7 @@ void loop() {
         delay(veryLongDelayPrinter);
         printer.println(F("So, you die!\nI suppose that is a thing that\ncould happened but honestly\ni programmed this game\nin a way "
                           "to avoid this, so\ncongratulations|\n\n\nI almost forgot to tell you that\nright now URZUNTUM is playing\nwith your dead body\n\n(it is so cute)\n\n"
-                          "Your adventure is over, now\nit's time to cut your paper\nand find a good place to conserve it\nPress any button to restart the Adventure.\n\n\n\n\n\n---------\n\n"));
+                          "Your adventure is over, now\nit's time to cut your paper\nand find a good place to\nconserve it\nPress any button to restart the Adventure.\n\n\n\n\n\n---------\n\n"));
         delay(longDelayPrinter);
         waitButtonAndReturnYesButton();
         changeChapter(basePosition, basePosition, basePosition, SETUP);
@@ -485,7 +485,7 @@ bool hitEnemyShield()//return true if you kill the enemy
     delay(shortDelayPrinter);
     return enemyLoseLife();
   }
-  printer.println(F("Your hit lashes out URZUNTUM's shield\n you don't hit your enemy but at least you have damaged\nhis shield.\n\n"));
+  printer.println(F("Your hit lashes out URZUNTUM's\nshield, you don't hit your\nenemy but at least you\nhave damaged his shield.\n\n"));
   return false;
 }
 
@@ -524,7 +524,7 @@ bool enemyShieldHurtYou()//return true if the hero lose a life
 
   if (randNumber < (maxEnemyShield - enemyShield) * riskPoint)
   {
-    printer.println(F("Unfortunatly a piece of the shield\nfall down and hit your head wounding you.\n\n"));
+    printer.println(F("Unfortunatly a piece of the\nshield fall down and hit\nyour head wounding you.\n\n"));
     delay(shortDelayPrinter);
     return heroLoseLife();
   }
@@ -546,7 +546,7 @@ bool smartWalk()
     delay(shortDelayPrinter);
     return true;
   }
-  printer.println(F("You are not so fast\n URZUNTUM understand your move and walks to\ncancel your advantage.\n\n"));
+  printer.println(F("You are not so fast\nURZUNTUM understand your move and walks to\ncancel your advantage.\n\n"));
   return false;
 }
 
@@ -603,10 +603,10 @@ void procedureSmartWalk()
     changeChapter(walkPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
 }
 
-const int quickLifePoints = 5;
+const int quickLifePoints = 6;
 const int quickShieldPoint = 2;
 const int quickEnemyLifePoints = 1;
-const int quickEnemyShieldPoint = 5;
+const int quickEnemyShieldPoint = 6;
 /*
    Qui viene calcolato se l'attacco rapido quando il nemico si muove va a buon fine
    Molto difficile che succeda.
@@ -627,12 +627,12 @@ void procedureQuickAttack()
       return;
     }
   }
-  printer.println(F("As was to be expected you miss URZUNTUM\nand now is in a advantage position\n\n"));
+  printer.println(F("As was to be expected you miss\nURZUNTUM and now is in\na advantage position\n\n"));
   delay(longDelayPrinter);
   changeChapter(attackPosition, walkPosition, walkPosition, ENEMYPREPARETOATTACK);
 }
 
-const int parringPoint = 27;
+const int parringPoint = 29;
 /*
    Qui viene calcolato se il colpo del nemico è parato con successo
    In qualsiasi caso lo scudo è danneggiato
@@ -660,15 +660,15 @@ bool procedureParring()
   return heroLoseLife();
 }
 
-const int dodgeShieldPoint = 10;
-const int baseDodgePoints = 12;
+const int dodgeShieldPoint = 12;
+const int baseDodgePoints = 16;
 /*
    Qui viene calcolato se la schivata del giocatore è andata a buon fine.
    Più si è sani, più lo scudo è danneggiato e più il nemico e ferito e più si ha probabilità.
 */
 bool procedureDodge()
 {
-  printer.println(F("Urzuntum raise up his shield up his head\nand with all of his strenght hits the ground, you...\n\n\n\n\n"));
+  printer.println(F("Urzuntum raise up his shield up\nhis head and with all of\nhis strenght hits the ground\n\nyou...\n\n\n\n\n"));
   delay(shortDelayPrinter);
   long randNumber = random(100);
   int malusPosition = 0;
@@ -676,7 +676,7 @@ bool procedureDodge()
     malusPosition += 31;
   if (randNumber < (baseDodgePoints + (maxHeroShield - heroShield) * dodgeShieldPoint) - malusPosition + (maxEnemyLife - enemyLife) * 8)
   {
-    printer.println(F("WAS ABLE TO DODGE\n\nIt's incredible, you did not receive any damage!"));
+    printer.println(F("WAS ABLE TO DODGE\n\nIt's incredible, you did not\nreceive any damage!\n\n"));
     return false;
   }
   printer.println(F("Was not enough fast to dodge it :(\n\nthis hit wounded you.\n\n\n"));
